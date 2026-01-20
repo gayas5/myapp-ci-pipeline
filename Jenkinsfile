@@ -8,13 +8,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main',
-                url: 'https://github.com/gayas5/myapp-ci-pipeline.git'
-            }
-        }
-
         stage('Build App') {
             steps {
                 echo "Building application..."
@@ -23,7 +16,13 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'python3 -m pytest tests/'
+                sh '''
+                docker run --rm \
+                -v $(pwd):/app \
+                -w /app \
+                python:3.9-slim \
+                sh -c "pip install -r requirements.txt && pytest tests/"
+                '''
             }
         }
 
