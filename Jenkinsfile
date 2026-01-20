@@ -10,8 +10,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/gayas5/myapp-ci-pipeline.git'
+                checkout scm
             }
         }
 
