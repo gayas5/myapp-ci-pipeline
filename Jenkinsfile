@@ -1,10 +1,10 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "gayas555/myapp"
-        TAG = "latest"
-    }
+environment {
+    IMAGE_NAME = "gayas555/myapp"
+    TAG = "latest"
+}
 
     stages {
 
