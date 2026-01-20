@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "gayas5/myapp"
+        IMAGE_NAME = "gayas555/myapp"
         TAG = "latest"
     }
 
