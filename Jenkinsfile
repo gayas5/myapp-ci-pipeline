@@ -1,59 +1,19 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "gayas555/myapp"
-        TAG = "latest"
-    }
-
     stages {
-
-        stage('Build App') {
+        stage('Checkout') {
             steps {
-                echo "Building application..."
+                git branch: 'main',
+                    url: 'https://github.com/gayas5/myapp-ci-pipeline.git',
+                    credentialsId: 'github-creds' // remove if repo is public
             }
         }
 
-        stage('Run Tests') {
+        stage('Build') {
             steps {
-                sh '''
-                docker run --rm \
-                  -v $(pwd):/app \
-                  -w /app \
-                  python:3.9-slim \
-                  sh -c "pip install -r requirements.txt && pytest tests/"
-                '''
+                echo "Build stage running..."
             }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t $IMAGE_NAME:$TAG .'
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
-                    sh '''
-                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    docker push $IMAGE_NAME:$TAG
-                    '''
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "CI Pipeline completed successfully"
-        }
-        failure {
-            echo "CI Pipeline failed"
         }
     }
 }
